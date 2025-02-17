@@ -1,0 +1,55 @@
+[
+  {
+    "command": "iri-get-systeminfo"
+  },
+  {
+    "command": "iri-get-products"
+  },
+  {
+    "command": "iri-get-pnpdevices"
+  },
+  {
+    "command": "iri-get-localdrives"
+  },
+  {
+    "command": "iri-get-accounts"
+  },
+  {
+    "command": "iri-get-groups"
+  },
+  {
+    "command": "iri-get-profiles"
+  },
+  {
+    "command": "iri-get-networkinfo"
+  },
+  {
+    "command": "iri-get-netdrives"
+  },
+  {
+    "command": "iri-get-smbshares"
+  },
+  {
+    "command": "iri-get-winevents",
+    "parameters": {
+      "logname": "Security",
+      "timeframe": "120",
+      "outputtype": "csv"
+    }
+  },
+  {
+    "command": "iri-get-processes"
+  },
+  {
+    "command": "iri-get-scheduledtasks"
+  },
+  {
+    "command": "iri-get-services"
+  },
+  {
+    "command": "iri-get-registry",
+    "parameters": {
+      "scan": "normal"
+    }
+  }
+]
