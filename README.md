@@ -1,4 +1,4 @@
-# Invoke-Remoteinsight
+# Invoke-RemoteInsight
 
 ## Description
 Invoke-RemoteInsight is a `live remote forensic tool` for the investigation of Windows systems. \
@@ -117,7 +117,7 @@ The following requirements should be met in order to use the tool. An automatic 
 3. Just enter one of them followed by any arguments
 
 4. `Integrated/Local Commands`: \
-*>* -forget *config_file*: Lets the tool execute predefined commands fully automatically \
+*>* fire-and-forget *config_file*: Lets the tool execute predefined commands fully automatically \
 *>* change-targetsystem: Switch to a different remote system \
 *>* change-targetuser: Switch to a different user on the remote system \
 *>* tool-help: Display this help message \
