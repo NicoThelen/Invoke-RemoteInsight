@@ -85,9 +85,16 @@ function check_requirements {
         $remoting_check = $False
     }
 
-    # Checking firewall rule (German Version)
-    $firewall_rule =  Get-NetFirewallRule -DisplayGroup "Windows-Remoteverwaltung" -ErrorAction SilentlyContinue
-    if ($firewall_rule -and $firewall_rule.Enabled -eq 'True') {
+    # Checking firewall rule (German & English OS supported)
+    $groups = @("Windows-Remoteverwaltung", "Windows Remote Management")    # Define possible display groups for WinRM, add languages to be supported to the list
+    $firewall_rule = $null
+    foreach ($group in $groups) {
+        $firewall_rule = Get-NetFirewallRule -DisplayGroup $group -ErrorAction SilentlyContinue | Where-Object { $_.Enabled -eq 'True' }
+        if ($firewall_rule) { 
+            break 
+        }
+    }
+    if ($firewall_rule) {
         Write-Host "[i] " -NoNewline -ForegroundColor Green; Write-Host "Firewall: Allows WinRM traffic"
         $firewall_check = $True
     } else {
@@ -107,11 +114,12 @@ function check_requirements {
     }
 
     # Checking user privilege
-    if (([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
+    $current_principal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+    if ($current_principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
         Write-Host "[i] " -NoNewline -ForegroundColor Green; Write-Host "Current Powershell-Session: Administrator"
         $admin_check = $True
     } else {
-        Write-Host "[!] " -NoNewline -ForegroundColor Red; Write-Host "Current Powershell-Session: Not administrator"
+        Write-Host "[!] " -NoNewline -ForegroundColor Red; Write-Host "Current Powershell-Session: Not Administrator"
         $admin_check = $False
     }
 
