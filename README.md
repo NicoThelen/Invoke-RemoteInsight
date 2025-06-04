@@ -156,14 +156,14 @@ iri-get-winevents -logname=System -timeframe=240 -outputtype=csv
 ```
 Get and analyse Windows Processes
 ```powershell
-# Get a list of all processes + extended informations for each process
+# Get a list of all processes + extended information for each process
 iri-get-processes
 # Start a in depth analysis of a given process
 iri-analyse-process -processid=1337
 ```
 List and analyse files ADS
 ```powershell
-# List the ADS and more detailed informations for the ByteCodeGenerator.exe
+# List the ADS and more detailed information for the ByteCodeGenerator.exe
 iri-get-ads -path=C:\Windows\System32\ByteCodeGenerator.exe
 # List the ADS and more detailed information for all files under \System32\ (recursive)
 iri-get-ads -path=C:\Windows\System32 -recurse=recurse
@@ -187,9 +187,9 @@ More
 ```powershell
 # List all accounts on the system
 iri-get-accounts
-# List all interesting informations regarding the remote system
+# List all interesting information regarding the remote system
 iri-get-systeminfo
-# List all interesting informations regarding the remote systems network properties
+# List all interesting information regarding the remote systems network properties
 iri-get-networkinfo
 # Get a in depth analysis of all recycle bins for all users and all drives and output it as csv
 iri-analyse-recyclebin -outputtype=csv
