@@ -125,10 +125,10 @@ function check_requirements {
 
     if ($service_check -and $remoting_check -and $firewall_check -and $listener_check -and $admin_check) {
         Write-Host "`n[i] " -NoNewline -ForegroundColor Yellow; Write-Host "All requirements are met"
-        logging "initialisiation successfull, all requirements are met" "success"
+        logging "initialization successful, all requirements are met" "success"
     } else {
         Write-Host "`n[!] " -NoNewline -ForegroundColor Red; Write-Host "Not all requirements have been met, there may be errors or limitations in the tool"
-        logging "initialisiation error, not all requirements are met" "fail"
+        logging "initialization error, not all requirements are met" "fail"
     }
 
     wait_user
@@ -806,7 +806,7 @@ function run_commands {
                 $command_path = Resolve-Path "$script_path\*\$command.ps1"                                                   
                 $result = Invoke-Command -Session $session -FilePath "$command_path" -ErrorAction Stop      # Execute custom script without params
             }   
-            logging "Successfull execution, '$command_params', '$target_host'" "success"
+            logging "Successful execution, '$command_params', '$target_host'" "success"
 
             # If execution created output, call handle output function
             if ($result) { 
@@ -839,7 +839,7 @@ function run_commands {
                     throw
                 }
             } -ArgumentList $command_params -ErrorAction Stop
-            logging "Successfull execution, '$command_params', '$target_host'" "success"
+            logging "Successful execution, '$command_params', '$target_host'" "success"
 
             # If execution created output, call handle output function
             if ($result) {
