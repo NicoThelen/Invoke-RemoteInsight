@@ -134,6 +134,32 @@ function check_requirements {
     wait_user
 }
 
+# Get current enviroment settings and log them - important for hash calculation of command outputs
+function get_current_enviroment {
+
+    $current_env = [pscustomobject]@{
+        PSVersion             = $PSVersionTable.PSVersion.ToString()
+        PSEdition             = $PSVersionTable.PSEdition
+        OSVersion             = [System.Environment]::OSVersion.VersionString
+        Is64BitProcess        = [System.Environment]::Is64BitProcess
+        PSCulture             = $PSCulture
+        PSUICulture           = $PSUICulture
+        CurrentCulture        = [System.Globalization.CultureInfo]::CurrentCulture.Name
+        CurrentUICulture      = [System.Globalization.CultureInfo]::CurrentUICulture.Name
+        HostName              = $Host.Name
+        HostBufferWidth       = ($Host.UI.RawUI.BufferSize.Width  | ForEach-Object { $_ })
+        HostWindowWidth       = ($Host.UI.RawUI.WindowSize.Width  | ForEach-Object { $_ })
+        OutStringWidth        = 4096
+        OutputEncoding        = [Console]::OutputEncoding.WebName
+        HashInputEncoding     = 'UTF-8'
+        FormatEnumerationLimit= $FormatEnumerationLimit
+        ImportedModules       = (Get-Module | Select-Object -ExpandProperty Name) -join ','
+        ModuleVersions        = (Get-Module | ForEach-Object { "$($_.Name)=$($_.Version)" }) -join ';'
+    }
+
+    logging "Current enviroment settings: $current_env" "info" 
+}
+
 
 # Display banner
 function welcome {
@@ -330,18 +356,18 @@ function calculate_Hash {
 
     if (Test-Path -Path $object_to_hash -PathType Leaf -ErrorAction SilentlyContinue) {
         $hash = (Get-FileHash -Algorithm SHA256 $object_to_hash).hash
-
+        
     } else {
         $string_to_hash = $object_to_hash -as [string]
 
         if (-not $string_to_hash) {
-            $string_to_hash = $object_to_hash | Out-String  # Convert returned objects or arrays to string
+            $string_to_hash = $object_to_hash | Out-String -Width 4096        # Convert returned objects or arrays to string with fix width
         }
 
         $sha256 = [System.Security.Cryptography.SHA256]::Create()
         $bytes = [System.Text.Encoding]::UTF8.GetBytes($string_to_hash)
         $hashBytes = $sha256.ComputeHash($bytes)
-        $hash = -join ($hashBytes | ForEach-Object { "{0:x2}" -f $_ })
+        $hash = -join ($hashBytes | ForEach-Object { "{0:X2}" -f $_ })
     }
         
     return $hash
@@ -909,6 +935,7 @@ function control {
 
     welcome                                                     # Display banner for the first time, without targetsystem and targetuser info 
     check_requirements                                          # Check requirements to run the tool
+    get_current_enviroment                                      # Function to list important individual enviroment settings of the machine and powershell session
     welcome                                                     # Display banner again after requirements check to clear console
     $session, $target_host, $target_ip = get_target             # Let user choose targetsystem for the first time before starting the loop
     $user, $sid = get_user                                      # Automatically get the targetuser of the chosen targetsystem
@@ -1015,3 +1042,4 @@ function control {
 ### START TOOL ###
 control
 ##################
+
